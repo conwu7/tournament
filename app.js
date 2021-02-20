@@ -13,7 +13,7 @@ const initializeAuth = require('./lib/auth/authentication');
 const {errorHandler, noPageHandler} = require('./lib/helpers/route-errors');
 
 // Routes
-const sendReactApp = require('./lib/routes/send-react-app');
+const {sendReactApp, reactRouter} = require('./lib/routes/send-react-app');
 const apiRouter = require('./lib/routes/api');
 
 // Initialize app
@@ -29,17 +29,26 @@ const db = require('./lib/db/db_index');
 initializeAuth(app, db);
 
 // Cors setup
-// const corsOptions = {
-//     origin: 'https://conwu7.github.io',
-//     optionsSuccessStatus: 200,
-//     credentials: true
-// }
-// app.options('*', cors(corsOptions));
 app.use(cors());
 
 // Initialize pre-routing middleware
 app.use(compression());
-app.use(helmet());
+// app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'"],
+            styleSrc: ["'self' 'unsafe-inline'", "https://fonts.googleapis.com"],
+            imgSrc: ["'self'", 'data:', "https://www.thesportsdb.com"],
+            connectSrc: ["'self'"],
+            fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+            objectSrc: ["'self'"],
+            mediaSrc: ["'self'"],
+            frameSrc: ["'self'"],
+        },
+    }
+}));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -48,11 +57,12 @@ app.use(cookieParser());
 // routing
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', apiRouter);
-app.use('/tournament', sendReactApp);
-app.use('/search', sendReactApp);
-app.use('/login', sendReactApp);
-app.use('/signup', sendReactApp);
-app.use('/new', sendReactApp);
+app.use('/tournament', reactRouter);
+app.use('/tournament/*', reactRouter);
+app.use('/search', reactRouter);
+app.use('/login', reactRouter);
+app.use('/signup', reactRouter);
+app.use('/new', reactRouter);
 app.use('/', sendReactApp);
 
 // 404 handler
