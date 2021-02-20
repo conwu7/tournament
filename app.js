@@ -57,13 +57,12 @@ app.use(cookieParser());
 // routing
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', apiRouter);
-app.use('/tournament', reactRouter);
-app.use('/tournament/*', reactRouter);
-app.use('/search', reactRouter);
-app.use('/login', reactRouter);
-app.use('/signup', reactRouter);
-app.use('/new', reactRouter);
-app.use('/', sendReactApp);
+app.get('/tournament', reactRouter);
+app.get('/search', reactRouter);
+app.get('/login', reactRouter);
+app.get('/signup', reactRouter);
+app.get('/new', reactRouter);
+app.get('/', sendReactApp);
 
 // 404 handler
 app.use(noPageHandler);
