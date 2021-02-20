@@ -29,13 +29,13 @@ const db = require('./lib/db/db_index');
 initializeAuth(app, db);
 
 // Cors setup
-const corsOptions = {
-    origin: 'https://conwu7.github.io',
-    optionsSuccessStatus: 200,
-    credentials: true
-}
-app.options('*', cors(corsOptions));
-app.use(cors(corsOptions));
+// const corsOptions = {
+//     origin: 'https://conwu7.github.io',
+//     optionsSuccessStatus: 200,
+//     credentials: true
+// }
+// app.options('*', cors(corsOptions));
+app.use(cors());
 
 // Initialize pre-routing middleware
 app.use(compression());
