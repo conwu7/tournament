@@ -7,6 +7,7 @@ const logger = require('morgan');
 // other middleware required
 const compression = require('compression');
 const helmet = require('helmet');
+const cors = require('cors');
 
 const initializeAuth = require('./lib/auth/authentication');
 const {errorHandler, noPageHandler} = require('./lib/helpers/route-errors');
@@ -26,6 +27,13 @@ const db = require('./lib/db/db_index');
 
 // Initialize session and authentication
 initializeAuth(app, db);
+
+// Cors setup
+const corsOptions = {
+    origin: 'https://conwu7.github.io',
+    optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions));
 
 // Initialize pre-routing middleware
 app.use(compression());
